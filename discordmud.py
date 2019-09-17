@@ -6,11 +6,21 @@ import os
 import threading
 import re
 
-if os.path.exists('.token'):
-    discordtoken = open('.token', 'r').read()
-    print(discordtoken)
-else:
-    discordtoken = os.environ['DISCORD']
+
+def getvar(string, defaultstr='none'):
+    sstring = str(string)
+    if os.path.exists('.' + sstring):
+        return open('.' + sstring, 'r').read()
+    else:
+        if sstring.upper() in os.environ.keys():
+            return os.environ[sstring.upper()]
+        else:
+            return defaultstr
+
+
+discordtoken = getvar('discord')
+mudname = getvar('mudname', 'discorder')
+mudpass = getvar('mudpass', 'discord')
 
 
 def discordtext(input):
@@ -46,11 +56,13 @@ def outputrec():
     while not client.is_closed():
         output = url = re.sub('\\n$', '', tn.read_until(b'\n').decode(
             'utf-8'))
-        # green exclamation marks
-        output = re.sub('\[.;36m!', '᥅', output)
-        output = re.sub('\[.;34m\+', '🔒', output)
-        output = re.sub('\[.;33m<', '▼', output)
-        output = re.sub('\[.;33m>', '▲', output)
+
+        output = re.sub('\[.;36m!', '᥅', output)  # unkillable mob
+        output = re.sub('\[.;34m\+', '🔒', output)  # closed door
+        output = re.sub('\[.;33m<', '▼', output)  # closed down exit
+        output = re.sub('\[.;33m>', '▲', output)  # closed up exit
+        output = re.sub('\[.;35m#', '♥', output)  # you icon
+        
         print(output)
         mudstring += output
 
