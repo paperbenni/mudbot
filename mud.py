@@ -1,7 +1,8 @@
 import telnetlib
 import time
 import threading
-
+import discord
+import re
 
 class Mud:
 
@@ -18,6 +19,7 @@ class Mud:
             port = 4000
         self.host = host
         self.port = port
+        self.username = b'discorder'
         self.tn = telnetlib.Telnet(host, port)
 
     def login(self, username=b'discorder', password=b'discord'):
@@ -35,23 +37,33 @@ class Mud:
             self.tn.write(b'\n')
 
     def execute(self, command):
-        execommand = command
+        execommand = bytes(command, encoding='utf8')
+        if command == '!':
+            return
         if command == '!!':
-            execommand == b'\n'
-
+            execommand = b'\n'
+        else:
+            execommand = execommand + b'\n'
         try:
-            self.tn.write(bytes(execommand + '\n', encoding='utf8'))
+            self.tn.write(execommand)
         except:
             self.connect(self.host, self.port)
             time.sleep(0.2)
-            print(self.username, 'reconnecting')
+            print(self.username.decode('utf-8'), 'reconnecting')
             self.execute(command)
 
-    def read(self):
-        def reader(self):
+    def read(self, mudd, mudlist):
+        def reader():
             while True:
-                output = self.tn.read_until(b'\n')
-                self.messages += output
+
+                try:
+                    output = re.sub(
+                        '\\n$', '', mudd.tn.read_until(b'\n').decode('utf-8'))
+                    self.messages += output
+                except:
+                    print("mud removed")
+                    mudlist.remove(mudd)
+                    break
         return threading.Thread(target=reader)
 
     def getstring(self):
