@@ -31,6 +31,7 @@ class Mud:
             self.tn.read_until(b'adventurer?')
             time.sleep(1)
             self.tn.write(self.username + b'\n')
+            self.tn.read_until(b'Password:')
             time.sleep(1)
             self.tn.write(self.password + b'\n')
             time.sleep(0.5)

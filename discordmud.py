@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 import discord
 import asyncio
@@ -5,6 +6,7 @@ import os
 import threading
 import re
 import mud
+import colorama
 
 
 def getvar(string, defaultstr='none'):
@@ -23,12 +25,25 @@ discordtoken = getvar('discord')
 print(discordtoken)
 
 
+magenta = '\[.;35m'
+red = '\[.;31m'
+green = '\[.;32m'
+lightred = '\[.;91m'
+lightblue = '\[.;36m'
+yellow = '\[.;33m'
+blue = '\[.;34m'
+
 def mudtext(mud):
-    output = re.sub('\[.;36m!', '᥅', mud)  # unkillable mob
-    output = re.sub('\[.;34m\+', '🔒', output)  # closed door
+    output = re.sub('.' + lightblue + '\!', '🐶', mud)  # pet mob
+    output = re.sub('.' + '\[.;34m\+', '🔒', output)  # closed door
     output = re.sub('\[.;33m<', '▼', output)  # closed down exit
     output = re.sub('\[.;33m>', '▲', output)  # closed up exit
-    output = re.sub('\[.;35m#', '♥', output)  # you icon
+    output = re.sub('.' + magenta + '#', '😀', output)  # you icon
+    output = re.sub('.' + magenta + '\*', '😐', output)  # other players icon
+    output = re.sub('.' + red + '\!', '🤬', output)  # hostile icon
+    output = re.sub('.' + yellow + '\!', '🏎', output) # mobile icon
+    output = re.sub('.' + green + '\$', '🤑', output) # hostile icon
+    output = re.sub('.' + lightblue + '~.~', ' 🌊', output) # waternoswim icon
     return output
 
 
@@ -82,6 +97,7 @@ async def on_message(message):
             else:
                 thismud.connect()
             muds.append(thismud)
+            thismud.login()
             thismud.read(thismud, muds).start()
             await thismud.getchannel().send('mud channel added')
             alreadyadded = True
