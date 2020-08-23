@@ -22,7 +22,7 @@ class Mud:
         self.username = b'discorder'
         self.tn = telnetlib.Telnet(host, port)
 
-    def login(self, username=b'discorder', password=b'discord'):
+    def login(self, username=b'instantos', password=b'instantosdiscord'):
         self.username = username
         self.password = password
         if self.logged_in:
@@ -32,7 +32,7 @@ class Mud:
             time.sleep(1)
             self.tn.write(self.username + b'\n')
             time.sleep(1)
-            self.tn.write(self.password + b'discord\n')
+            self.tn.write(self.password + b'\n')
             time.sleep(0.5)
             self.tn.write(b'\n')
 
